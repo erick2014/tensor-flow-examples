@@ -1,0 +1,54 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Cat detection</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.1"> </script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@1.0.0"> </script>
+  <style>
+    .cat-one-container {
+      width: 200px;
+      height: 200px;
+    }
+
+    .cat-one {
+      width: 100px;
+      height: 100px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="cat-one-container">
+    <img id="image" alt="cat laying down" class="cat-one"
+      src="./images/An_up-close_picture_of_a_curious_male_domestic_shorthair_tabby_cat.jpg" />
+    <ul id="cat-one-list-predictions">
+    </ul>
+  </div>
+
+
+  <script>
+    const img = document.getElementById('image');
+
+    const predictImage = async () => {
+      console.log("Model loading...");
+      const model = await mobilenet.load();
+      console.log("Model is loaded!")
+
+      const predictions = await model.classify(img);
+      console.log('Predictions: ', predictions);
+      const catPredictionList = document.getElementById('cat-one-list-predictions')
+      predictions && predictions.length && predictions.map(catPrediction => {
+        console.log('catPrediction ', catPrediction)
+        const li = document.createElement('li')
+        li.appendChild(document.createTextNode('cat type: ' + catPrediction.className + ' probability: ' + catPrediction.probability))
+        catPredictionList.appendChild(li)
+      })
+    }
+    predictImage();
+  </script>
+</body>
+
+</html>
